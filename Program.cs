@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Terminal.Gui;
 
 namespace XMPP
 {
@@ -14,7 +15,17 @@ namespace XMPP
             MessageStore.RcvdMessages = SerializationLogic.DeserializeReceivedMsgs("received.txt");
             MessageStore.SentMessages = SerializationLogic.DeserializeSentMsgs("sent.txt");
 
-            WindowLogic.Execute();
+        mark:
+
+            try
+            {
+                WindowLogic.Execute();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Query("Error", ex.Message, "OK");
+                goto mark;
+            }
         }
     }
 }

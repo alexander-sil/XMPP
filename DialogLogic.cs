@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.IO;
+using System.Text;
 using Terminal.Gui;
+using Artalk.Xmpp;
 using static Terminal.Gui.View;
 
 namespace XMPP
@@ -61,6 +64,20 @@ namespace XMPP
         #endregion
 
         #region Methods
+
+        public static void ShowSentMsgs()
+        {
+            MessageStore.SentMessages = SerializationLogic.DeserializeSentMsgs("sent.txt");
+
+            MessageBox.Query("Sent Messages", MessageStore.SentMessages, "OK");
+        }
+
+        public static void ShowRcvdMsgs()
+        {
+            MessageStore.RcvdMessages = SerializationLogic.DeserializeReceivedMsgs("received.txt");
+
+            MessageBox.Query("Received Messages", MessageStore.RcvdMessages, "OK");
+        }
 
         public static void ShowConnectDialog()
         {
@@ -145,6 +162,95 @@ namespace XMPP
                 MessageBox.Query("Error", "Invalid port number format", "OK");
             }
 
+        }
+
+        public static void ShowMessageComposeDialog()
+        {
+
+            _MessageComposeDialogReceiverJIDAddressField.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogReceiverJIDAddressField.SetFocus());
+            _MessageComposeDialogSubjectField.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogSubjectField.SetFocus());
+            _MessageComposeDialogMessageField.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogMessageField.SetFocus());
+
+            _MessageComposeDialogYesButton.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogYesButton.SetFocus());
+            _MessageComposeDialogNoButton.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogNoButton.SetFocus());
+
+            _MessageComposeDialog.Add(_MessageComposeDialogReceiverJIDAddressField);
+            _MessageComposeDialog.Add(_MessageComposeDialogSubjectField);
+            _MessageComposeDialog.Add(_MessageComposeDialogMessageField);
+
+            _MessageComposeDialog.Add(_MessageComposeDialogReceiverJIDAddressLabel);
+            _MessageComposeDialog.Add(_MessageComposeDialogSubjectLabel);
+            _MessageComposeDialog.Add(_MessageComposeDialogMessageLabel);
+
+            _MessageComposeDialog.Add(_MessageComposeDialogYesButton);
+            _MessageComposeDialog.Add(_MessageComposeDialogNoButton);
+
+            WindowLogic.window.Add(_MessageComposeDialog);
+
+
+
+            _MessageComposeDialogYesButton.Clicked += ShowMessageComposeDialogYes;
+            _MessageComposeDialogNoButton.Clicked += ShowMessageComposeDialogNo;
+
+            _ConnectDialog.SetFocus();
+        }
+
+        private static void ShowMessageComposeDialogNo()
+        {
+            _MessageComposeDialogReceiverJIDAddressField.Text = "";
+            _MessageComposeDialogSubjectField.Text = "";
+            _MessageComposeDialogMessageField.Text = "";
+
+            _MessageComposeDialog.RemoveAll();
+
+            WindowLogic.window.Remove(_MessageComposeDialog);
+
+            _MessageComposeDialogYesButton.Clicked -= ShowMessageComposeDialogYes;
+            _MessageComposeDialogNoButton.Clicked -= ShowMessageComposeDialogNo;
+
+            WindowLogic.window.SetFocus();
+        }
+
+        private static void ShowMessageComposeDialogYes()
+        {
+            string jid = (string)_MessageComposeDialogReceiverJIDAddressField.Text;
+            string subj = (string)_MessageComposeDialogSubjectField.Text;
+            string msg = (string)_MessageComposeDialogMessageField.Text;
+
+            _MessageComposeDialogReceiverJIDAddressField.Text = "";
+            _MessageComposeDialogSubjectField.Text = "";
+            _MessageComposeDialogMessageField.Text = "";
+
+            _MessageComposeDialogYesButton.Clicked -= ShowMessageComposeDialogYes;
+            _MessageComposeDialogNoButton.Clicked -= ShowMessageComposeDialogNo;
+
+            _MessageComposeDialog.RemoveAll();
+
+            WindowLogic.window.Remove(_MessageComposeDialog);
+
+            try
+            {
+                Jid check = new Jid(jid);
+
+                Logic.SendMessage(check, subj, msg);
+
+                DateTime date = DateTime.Now;
+
+                string store = MessageStore.SentMessages;
+
+                StringBuilder builder = new StringBuilder(store);
+
+                builder.AppendLine(msg);
+
+                MessageStore.SentMessages = builder.ToString();
+
+                SerializationLogic.AddSentMessage("sent.txt", msg, date);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Query("Error", $"Unable to send the specified message.\nThe exception is:\n{ex.Message}", "OK");
+            }
         }
 
         #endregion

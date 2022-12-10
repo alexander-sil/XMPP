@@ -5,22 +5,33 @@ namespace XMPP
 {
     public class SerializationLogic
     {
-        public static void Initialize(string path)
+        public static void Initialize(string spath, string rpath)
         {
-            if (!File.Exists(path))
+            if (!(File.Exists(rpath) && File.Exists(spath)))
             {
-                File.Create(path).Dispose();
+                File.Create(spath).Dispose();
+                File.Create(rpath).Dispose();
             }
         }
 
-        public static string DeserializeSentMsgs(string path)
+        public static string DeserializeSentMsgs(string spath)
         {
-            return File.ReadAllText(path);
+            return File.ReadAllText(spath);
         }
 
-        public static void AddSentMessage(string path)
+        public static string DeserializeReceivedMsgs(string rpath)
         {
-            File.AppendAllText(path, $"Message from {}");
+            return File.ReadAllText(rpath);
+        }
+
+        public static void AddSentMessage(string path, string msg, DateTime date)
+        {
+            File.AppendAllText(path, $"{date.ToLongDateString}\n\nMessage from You\n\n{msg}\n\n");
+        }
+
+        public static void AddReceivedMessage(string path, string msg)
+        {
+            File.AppendAllText(path, msg);
         }
     }
 }

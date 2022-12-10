@@ -29,16 +29,23 @@ namespace XMPP
                 client.Connect();
                 client.Message += OnMessage;
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Query("Error", $"Unable to connect to {host}", "OK");
+                MessageBox.Query("Error", $"Unable to connect to {host}.\nThe error message is:\n{ex.Message}", "OK");
             }
 
         }
 
         public static void SendMessage(Jid recipient, string subj, string msg)
         {
-
+            if ((client != null) && client.Connected)
+            {
+                client.SendMessage(recipient, msg, subj);
+            }
+            else
+            {
+                MessageBox.Query("Error", "Not connected. Aborting message send procedure", "OK");
+            }
         }
 
         public static void OnMessage(object sender, Artalk.Xmpp.Im.MessageEventArgs e)
@@ -62,9 +69,21 @@ namespace XMPP
 
             string msg = sb.ToString();
 
-            MessageBox.Query("New Message", msg, "Discard", "Save");
-        }
+            string store = MessageStore.RcvdMessages;
 
+            StringBuilder builder = new StringBuilder(store);
+
+            builder.AppendLine(msg);
+
+            MessageStore.RcvdMessages = builder.ToString();
+
+            int answer = MessageBox.Query("New Message", msg, "Save", "Discard");
+
+            if (answer == 0)
+            {
+                SerializationLogic.AddReceivedMessage("received.txt", msg);
+            }
+        }
     }
 }
 

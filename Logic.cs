@@ -31,6 +31,7 @@ namespace XMPP
             }
             catch (Exception ex)
             {
+                client = null;
                 MessageBox.Query("Error", $"Unable to connect to {host}.\nThe error message is:\n{ex.Message}", "OK");
             }
 

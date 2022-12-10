@@ -31,7 +31,7 @@ namespace XMPP
 
         public static Label _ConnectDialogHostLabel = new Label(29, 2, "XMPP Hostname");
 
-        public static Label _ConnectDialogJIDAddressLabel = new Label(29, 4, "XMPP ID/JID");
+        public static Label _ConnectDialogJIDAddressLabel = new Label(29, 4, "XMPP Username");
 
         public static Label _ConnectDialogPasswordLabel = new Label(29, 6, "XMPP Password");
 
@@ -57,9 +57,9 @@ namespace XMPP
 
         public static Label _MessageComposeDialogMessageLabel = new Label(29, 6, "Message Body");
 
-        public static Button _MessageComposeDialogYesButton = new Button(2, 14, "OK");
+        public static Button _MessageComposeDialogYesButton = new Button(2, 12, "OK");
 
-        public static Button _MessageComposeDialogNoButton = new Button(2, 15, "Cancel");
+        public static Button _MessageComposeDialogNoButton = new Button(2, 13, "Cancel");
 
         #endregion
 

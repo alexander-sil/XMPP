@@ -19,13 +19,13 @@ namespace XMPP
 
         #region ConnectDialogControls
 
-        public static TextField _ConnectDialogHostField = new TextField(2, 8, 25, "");
+        public static TextField _ConnectDialogHostField = new TextField(2, 2, 25, "");
 
-        public static TextField _ConnectDialogJIDAddressField = new TextField(2, 2, 25, "");
+        public static TextField _ConnectDialogJIDAddressField = new TextField(2, 4, 25, "");
 
-        public static TextField _ConnectDialogPasswordField = new TextField(2, 4, 25, "");
+        public static TextField _ConnectDialogPasswordField = new TextField(2, 6, 25, "");
 
-        public static TextField _ConnectDialogPortField = new TextField(2, 6, 25, "5222");
+        public static TextField _ConnectDialogPortField = new TextField(2, 8, 25, "5222");
 
         public static CheckBox _ConnectDialogTLSBox = new CheckBox(2, 10, "Use TLS");
 
@@ -120,7 +120,7 @@ namespace XMPP
             _ConnectDialogJIDAddressField.Text = "";
             _ConnectDialogPasswordField.Text = "";
             _ConnectDialogPortField.Text = "5222";
-            _ConnectDialogTLSBox.Enabled = false;
+            _ConnectDialogTLSBox.Checked = false;
 
             _ConnectDialog.RemoveAll();
 
@@ -138,13 +138,13 @@ namespace XMPP
             string jid = (string)_ConnectDialogJIDAddressField.Text;
             string pass = (string)_ConnectDialogPasswordField.Text;
             string port = (string)_ConnectDialogPortField.Text;
-            bool tls = _ConnectDialogTLSBox.Enabled;
+            bool tls = _ConnectDialogTLSBox.Checked;
 
             _ConnectDialogHostField.Text = "";
             _ConnectDialogJIDAddressField.Text = "";
             _ConnectDialogPasswordField.Text = "";
             _ConnectDialogPortField.Text = "5222";
-            _ConnectDialogTLSBox.Enabled = false;
+            _ConnectDialogTLSBox.Checked = false;
 
             _ConnectDialogYesButton.Clicked -= ShowConnectDialogYes;
             _ConnectDialogNoButton.Clicked -= ShowConnectDialogNo;

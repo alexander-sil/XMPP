@@ -35,7 +35,7 @@ namespace XMPP
                 new MenuItem("Compose Message", "", DialogLogic.ShowMessageComposeDialog, () => (Logic.client != null)),
                 new MenuItem("View Sent Messages", "", DialogLogic.ShowSentMsgs),
                 new MenuItem("View Received Messages", "", DialogLogic.ShowRcvdMsgs),
-                new MenuItem("About", "", () => MessageBox.Query("About", "XMPP Client\nVersion 1.0\n(C) 2022 alexander-sil"))
+                new MenuItem("About", "", () => MessageBox.Query("About", "XMPP Client\nVersion 1.0\n(C) 2022 alexander-sil", "OK"))
             }) };
 
 

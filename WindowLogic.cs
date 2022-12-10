@@ -32,7 +32,7 @@ namespace XMPP
 
             MenuBarItem[] menu = new MenuBarItem[] { new MenuBarItem("Tools", new MenuItem[] {
                 new MenuItem("Log In", "", DialogLogic.ShowConnectDialog),
-                new MenuItem("Compose Message", "", DialogLogic.ShowMessageComposeDialog),
+                new MenuItem("Compose Message", "", DialogLogic.ShowMessageComposeDialog, () => (Logic.client != null)),
                 new MenuItem("View Sent Messages", "", DialogLogic.ShowSentMsgs),
                 new MenuItem("View Received Messages", "", DialogLogic.ShowRcvdMsgs),
                 new MenuItem("About", "", () => MessageBox.Query("About", "XMPP Client\nVersion 1.0\n(C) 2022 alexander-sil"))

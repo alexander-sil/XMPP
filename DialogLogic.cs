@@ -67,16 +67,20 @@ namespace XMPP
 
         public static void ShowSentMsgs()
         {
-            MessageStore.SentMessages = SerializationLogic.DeserializeSentMsgs("sent.txt");
+            string text = SerializationLogic.DeserializeSentMsgs("sent.txt");
 
-            MessageBox.Query("Sent Messages", MessageStore.SentMessages, "OK");
+            MessageBox.Query("Sent Messages", text, "OK");
+
+            WindowLogic.window.SetFocus();
         }
 
         public static void ShowRcvdMsgs()
         {
-            MessageStore.RcvdMessages = SerializationLogic.DeserializeReceivedMsgs("received.txt");
+            string text = SerializationLogic.DeserializeReceivedMsgs("received.txt");
 
-            MessageBox.Query("Received Messages", MessageStore.RcvdMessages, "OK");
+            MessageBox.Query("Received Messages", text, "OK");
+
+            WindowLogic.window.SetFocus();
         }
 
         public static void ShowConnectDialog()
@@ -235,14 +239,6 @@ namespace XMPP
                 Logic.SendMessage(check, subj, msg);
 
                 DateTime date = DateTime.Now;
-
-                string store = MessageStore.SentMessages;
-
-                StringBuilder builder = new StringBuilder(store);
-
-                builder.AppendLine(msg);
-
-                MessageStore.SentMessages = builder.ToString();
 
                 SerializationLogic.AddSentMessage("sent.txt", msg, date);
 

@@ -43,8 +43,11 @@ namespace XMPP
 
             top.Add(window);
 
-            Application.Run();
 
+            Application.Run();
+            
+            
+            
         }
     }
 }

@@ -47,15 +47,11 @@ namespace XMPP
 
         public static TextField _MessageComposeDialogReceiverJIDAddressField = new TextField(2, 2, 25, "");
 
-        public static TextField _MessageComposeDialogSubjectField = new TextField(2, 4, 25, "");
-
-        public static TextField _MessageComposeDialogMessageField = new TextField(2, 6, 25, "");
+        public static TextView _MessageComposeDialogMessageField = new TextView(new Rect(2, 4, 25, 6));
 
         public static Label _MessageComposeDialogReceiverJIDAddressLabel = new Label(29, 2, "Receiver JID Address");
 
-        public static Label _MessageComposeDialogSubjectLabel = new Label(29, 4, "Message Subject");
-
-        public static Label _MessageComposeDialogMessageLabel = new Label(29, 6, "Message Body");
+        public static Label _MessageComposeDialogMessageLabel = new Label(29, 4, "Message Body");
 
         public static Button _MessageComposeDialogYesButton = new Button(2, 12, "OK");
 
@@ -117,7 +113,6 @@ namespace XMPP
 
             _ConnectDialog.SetFocus();
         }
-
         private static void ShowConnectDialogNo()
         {
             _ConnectDialogHostField.Text = "";
@@ -172,18 +167,15 @@ namespace XMPP
         {
 
             _MessageComposeDialogReceiverJIDAddressField.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogReceiverJIDAddressField.SetFocus());
-            _MessageComposeDialogSubjectField.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogSubjectField.SetFocus());
             _MessageComposeDialogMessageField.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogMessageField.SetFocus());
 
             _MessageComposeDialogYesButton.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogYesButton.SetFocus());
             _MessageComposeDialogNoButton.MouseEnter += ((MouseEventArgs e) => _MessageComposeDialogNoButton.SetFocus());
 
             _MessageComposeDialog.Add(_MessageComposeDialogReceiverJIDAddressField);
-            _MessageComposeDialog.Add(_MessageComposeDialogSubjectField);
             _MessageComposeDialog.Add(_MessageComposeDialogMessageField);
 
             _MessageComposeDialog.Add(_MessageComposeDialogReceiverJIDAddressLabel);
-            _MessageComposeDialog.Add(_MessageComposeDialogSubjectLabel);
             _MessageComposeDialog.Add(_MessageComposeDialogMessageLabel);
 
             _MessageComposeDialog.Add(_MessageComposeDialogYesButton);
@@ -202,7 +194,6 @@ namespace XMPP
         private static void ShowMessageComposeDialogNo()
         {
             _MessageComposeDialogReceiverJIDAddressField.Text = "";
-            _MessageComposeDialogSubjectField.Text = "";
             _MessageComposeDialogMessageField.Text = "";
 
             _MessageComposeDialog.RemoveAll();
@@ -218,11 +209,9 @@ namespace XMPP
         private static void ShowMessageComposeDialogYes()
         {
             string jid = (string)_MessageComposeDialogReceiverJIDAddressField.Text;
-            string subj = (string)_MessageComposeDialogSubjectField.Text;
             string msg = (string)_MessageComposeDialogMessageField.Text;
 
             _MessageComposeDialogReceiverJIDAddressField.Text = "";
-            _MessageComposeDialogSubjectField.Text = "";
             _MessageComposeDialogMessageField.Text = "";
 
             _MessageComposeDialogYesButton.Clicked -= ShowMessageComposeDialogYes;
@@ -236,7 +225,7 @@ namespace XMPP
             {
                 Jid check = new Jid(jid);
 
-                Logic.SendMessage(check, subj, msg);
+                Logic.SendMessage(check, msg);
 
                 DateTime date = DateTime.Now;
 

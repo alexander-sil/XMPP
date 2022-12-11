@@ -27,7 +27,7 @@ namespace XMPP
 
         public static void AddSentMessage(string path, string msg, DateTime date)
         {
-            File.AppendAllText(path, $"{date.ToLongDateString()}\r\nMessage from You\r\n{msg}\r\n\r\n");
+            File.AppendAllText(path, $"{date.ToString()}\r\nMessage from You\r\n{msg}\r\n\r\n");
         }
 
         public static void AddReceivedMessage(string path, string msg)

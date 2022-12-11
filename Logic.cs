@@ -2,16 +2,24 @@
 using Artalk.Xmpp.Client;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Terminal.Gui;
-using Artalk.Xmpp.Im;
 
 namespace XMPP
 {
     public class Logic
     {
         public static ArtalkXmppClient client = null;
+
+        public static bool LogRcvdMsgs = true;
+
+        public static bool LogSentMsgs = true;
+
+        public static uint UnreadCount = 0;
+
+        public static List<string> UnreadMessages = new List<string>();
 
         ~Logic()
         {
@@ -25,8 +33,13 @@ namespace XMPP
             try
             {
                 client.Connect();
-                client.Message += OnMessage;
-                
+
+                WindowLogic.label.Text = $"{UnreadCount} New Messages";
+
+                EventHandler<Artalk.Xmpp.Im.MessageEventArgs> eventHandler = OnMessage;
+
+                client.Message += (s, e) => Task.Run(() => OnMessage(s, e));
+
             }
             catch (Exception ex)
             {
@@ -34,29 +47,29 @@ namespace XMPP
                 MessageBox.Query("Error", $"Unable to connect to {host}.\nThe error message is:\n{ex.Message}", "OK");
             }
 
+            WindowLogic.label.SetFocus();
         }
 
 
-        public static void SendMessage(Jid recipient, string subj, string msg)
+        public static void SendMessage(Jid recipient, string msg)
         {
             if ((client != null) && client.Connected)
             {
-                client.SendMessage(recipient, msg, subj);
+                client.SendMessage(recipient, msg, string.Empty);
             }
             else
             {
                 MessageBox.Query("Error", "Not connected. Aborting message send procedure", "OK");
             }
 
-            WindowLogic.window.SetFocus();
+            WindowLogic.label.SetFocus();
         }
 
         public static void OnMessage(object sender, Artalk.Xmpp.Im.MessageEventArgs e)
         {
-            
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine($"{DateTime.Now.ToLongDateString()}");
+            sb.AppendLine($"{DateTime.Now.ToString()}");
             sb.AppendLine($"Message from {e.Message.From}");
 
             sb.Append("\n");
@@ -67,22 +80,51 @@ namespace XMPP
 
             string msg = sb.ToString();
 
-            int answer = MessageBox.Query("New Message", msg, "Save", "Discard");
-
-            if (answer == 0)
+            if (LogRcvdMsgs)
             {
                 SerializationLogic.AddReceivedMessage("received.txt", msg);
             }
 
-            Application.Top.RemoveAll();
+            Task.Run(() => LabelClickHandler(msg));
 
-            WindowLogic.Execute();
+            WindowLogic.label.SetFocus();
+        }
 
-            client.Message -= OnMessage;
+        public static void LabelClickHandler(string msg)
+        {
+            UnreadCount++;
+            WindowLogic.label.Clicked += Label_Clicked;
+            WindowLogic.label.Text = $" [{UnreadCount} New Messages - CLICK HERE]";
+            UnreadMessages.Add(msg);
+        }
 
-            client.Message += OnMessage;
+        private static void Label_Clicked()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (string item in UnreadMessages)
+            {
+                sb.AppendLine(item);
+            }
+
             
 
+            UnreadMessages.Clear();
+
+            UnreadCount = 0;
+
+            WindowLogic.label.Text = $"{UnreadCount} New Messages";
+
+            WindowLogic.label.Clicked -= Label_Clicked;
+
+            var ShowUnreadMessagesOnce = ContextCallOnlyOnce.CallOnlyOnce(ShowUnreadMessages);
+
+            ShowUnreadMessagesOnce(sb.ToString());
+        }
+
+        public static void ShowUnreadMessages(string msg)
+        {
+            MessageBox.Query("Unread Messages", msg, "OK");
         }
     }
 }

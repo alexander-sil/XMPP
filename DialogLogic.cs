@@ -229,9 +229,11 @@ namespace XMPP
 
                 DateTime date = DateTime.Now;
 
-                SerializationLogic.AddSentMessage("sent.txt", msg, date);
-
-            }
+                if (Logic.LogSentMsgs)
+                {
+                    SerializationLogic.AddSentMessage("sent.txt", msg, date);
+                }
+            }            
             catch (Exception ex)
             {
                 MessageBox.Query("Error", $"Unable to send the specified message.\nThe exception is:\n{ex.Message}", "OK");

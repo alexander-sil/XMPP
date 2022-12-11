@@ -34,7 +34,7 @@ namespace XMPP
             {
                 client.Connect();
 
-                WindowLogic.label.Text = $"{UnreadCount} New Messages";
+                WindowLogic.label.Text = $" {UnreadCount} New Messages";
 
                 EventHandler<Artalk.Xmpp.Im.MessageEventArgs> eventHandler = OnMessage;
 
@@ -113,7 +113,7 @@ namespace XMPP
 
             UnreadCount = 0;
 
-            WindowLogic.label.Text = $"{UnreadCount} New Messages";
+            WindowLogic.label.Text = $" {UnreadCount} New Messages";
 
             WindowLogic.label.Clicked -= Label_Clicked;
 

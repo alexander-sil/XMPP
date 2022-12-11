@@ -1,5 +1,5 @@
-﻿using Terminal.Gui;
-using System;
+﻿using System;
+using Terminal.Gui;
 
 namespace XMPP
 {
@@ -28,29 +28,28 @@ namespace XMPP
 
         public static void Execute()
         {
-            while (true)
-            {
-                Toplevel top = Application.Top;
 
-                Console.Title = "XMPP";
+            Toplevel top = Application.Top;
 
-                Application.Init();
+            Console.Title = "XMPP";
 
-                Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-                Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Application.Init();
 
-                top = Application.Top;
+            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 
-                top.Add(new MenuBar(menu));
+            top = Application.Top;
 
-                top.Add(window);
+            top.Add(new MenuBar(menu));
 
-                window.Add(label);
+            top.Add(window);
 
-                Application.Run();
+            window.Add(label);
 
-                Logic.client.Close();
-            }
+            Application.Run();
+
+            Logic.client.Close();
+
         }
     }
 }

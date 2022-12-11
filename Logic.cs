@@ -117,9 +117,7 @@ namespace XMPP
 
             WindowLogic.label.Clicked -= Label_Clicked;
 
-            var ShowUnreadMessagesOnce = ContextCallOnlyOnce.CallOnlyOnce(ShowUnreadMessages);
-
-            ShowUnreadMessagesOnce(sb.ToString());
+            ShowUnreadMessages(sb.ToString());
         }
 
         public static void ShowUnreadMessages(string msg)

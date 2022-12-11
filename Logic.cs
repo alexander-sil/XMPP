@@ -17,6 +17,10 @@ namespace XMPP
 
         public static bool LogSentMsgs = true;
 
+        // TODO add cancellation reset on next receive
+        
+        public static bool Cancel = false;
+
         public static uint UnreadCount = 0;
 
         public static List<string> UnreadMessages = new List<string>();
@@ -117,12 +121,17 @@ namespace XMPP
 
             WindowLogic.label.Clicked -= Label_Clicked;
 
-            ShowUnreadMessages(sb.ToString());
+            ShowUnreadMessages(sb.ToString(), ref Cancel);
         }
 
-        public static void ShowUnreadMessages(string msg)
+        public static void ShowUnreadMessages(string msg, ref bool cancel)
         {
-            MessageBox.Query("Unread Messages", msg, "OK");
+            if (!cancel)
+            {
+                MessageBox.Query("Unread Messages", msg, "OK");
+            }
+
+            cancel = true;
         }
     }
 }
